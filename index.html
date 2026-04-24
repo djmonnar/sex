@@ -21,11 +21,13 @@
         .playing-card {
             transition: transform 0.2s, box-shadow 0.2s, margin-top 0.2s;
             cursor: pointer;
+            transform: rotate(var(--rot, 0deg)) translateY(var(--ty, 0px));
+            transform-origin: bottom center;
         }
         .playing-card:hover {
-            transform: translateY(-15px) scale(1.05);
+            transform: rotate(var(--rot, 0deg)) translateY(calc(var(--ty, 0px) - 15px)) scale(1.05);
             box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            z-index: 10;
+            z-index: 50 !important;
         }
         .playing-card.disabled {
             filter: grayscale(100%) brightness(0.6);
@@ -301,7 +303,8 @@
                 block: 0,
                 icon: enemyTemplate.icon,
                 damageBase: Math.floor(enemyTemplate.damageBase * scale),
-                intentType: enemyTemplate.intentType
+                intentType: enemyTemplate.intentType,
+                nextIntent: { type: 'attack', value: 0 }
             };
 
             // 덱 셔플 후 뽑는 더미로 이동
@@ -652,8 +655,8 @@
                 
                 const cardHtml = `
                     <div onclick="playCard(${index})" 
-                         class="playing-card w-40 h-56 ${card.color} border-4 ${card.border} rounded-xl p-3 flex flex-col justify-between shadow-xl ${disabledClass}"
-                         style="transform: rotate(${rotate}deg) translateY(${translateY}px); transform-origin: bottom center;">
+                         class="playing-card relative w-40 h-56 ${card.color} border-4 ${card.border} rounded-xl p-3 flex flex-col justify-between shadow-xl ${disabledClass}"
+                         style="--rot: ${rotate}deg; --ty: ${translateY}px; z-index: ${index};">
                         
                         <div class="flex justify-between items-center border-b border-gray-400 pb-1">
                             <span class="font-bold text-gray-800 text-sm truncate pr-1">${card.name}</span>
